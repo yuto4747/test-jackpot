@@ -15,7 +15,7 @@ body {
 
 #game-board {
     display: flex;
-    flex-wrap: wrap; /* 横幅に収まらない場合折り返す */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
     margin: 20px auto;
@@ -61,8 +61,29 @@ button {
     margin-top: 40px;
 }
 
-/* スマートフォン用のスタイル */
-@media (max-width: 600px) {
+/* 横画面対応 */
+@media (max-width: 900px) and (orientation: landscape) {
+    #game-board {
+        flex-wrap: nowrap; /* 横画面ではカードを横一列に配置 */
+    }
+
+    .card {
+        width: 80px;
+        height: 80px;
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    #status {
+        font-size: 16px;
+    }
+}
+
+/* 縦画面用の調整 */
+@media (max-width: 600px) and (orientation: portrait) {
     .card {
         width: 70px;
         height: 70px;
