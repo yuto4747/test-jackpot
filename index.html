@@ -37,5 +37,27 @@
         <button id="reset-button" onclick="resetGame()">リセット</button>
     </div>
     <script src="script.js"></script>
+
+    <h1>端末情報</h1>
+    <div id="deviceInfo"></div>
+
+    <script>
+        // 端末情報を取得
+        const deviceInfo = {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            online: navigator.onLine,
+        };
+
+        // HTMLに情報を表示
+        const infoContainer = document.getElementById('deviceInfo');
+        for (const [key, value] of Object.entries(deviceInfo)) {
+            const infoElement = document.createElement('div');
+            infoElement.className = 'info';
+            infoElement.textContent = `${key}: ${value}`;
+            infoContainer.appendChild(infoElement);
+        }
+    </script>
 </body>
 </html>
