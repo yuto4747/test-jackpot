@@ -18,6 +18,10 @@ let gameStarted = false;
 function rollDice() {
     if (isGameOver) return;
 
+    // 前回の「ちょんぼ発生！」およびサイコロの目の表示を消す
+    document.getElementById('status').innerText = "";
+    document.getElementById('dice-result').innerText = "";
+
     const isChonboEnabled = document.getElementById('chonbo-enabled').checked;
     const chonboRate = parseInt(document.getElementById('chonbo-rate').value) || 0;
 
@@ -38,10 +42,50 @@ function rollDice() {
     }
 }
 
-// カードの操作ロジックはそのまま
-function revertOrFlipCard(dice) { /* ... */ }
-function handleFlip(dice1, dice2) { /* ... */ }
-function checkGameOver(flipOccurred) { /* ... */ }
+// ゾロ目の場合に対応するカードを元に戻すか、文字に変える
+function revertOrFlipCard(dice) {
+    const card = document.getElementById(`card-${dice}`);
+    if (flippedCards.includes(dice)) {
+        card.classList.remove('flipped');
+        card.innerText = dice;
+        flippedCards = flippedCards.filter(id => id !== dice); // リストから削除
+    } else {
+        const cardData = cards.find(c => c.id === dice);
+        card.innerText = cardData.value;
+        card.classList.add('flipped');
+        flippedCards.push(dice);
+    }
+}
+
+// サイコロの目に基づいてカードをひっくり返す
+function handleFlip(dice1, dice2) {
+    const positions = [dice1, dice2, dice1 + dice2];
+    let flipOccurred = false;
+
+    positions.forEach(position => {
+        if (position >= 1 && position <= 9 && !flippedCards.includes(position)) {
+            const card = document.getElementById(`card-${position}`);
+            const cardData = cards.find(c => c.id === position);
+            card.innerText = cardData.value;
+            card.classList.add('flipped');
+            flippedCards.push(position);
+            flipOccurred = true;
+        }
+    });
+
+    checkGameOver(flipOccurred);
+}
+
+// ゲーム終了判定
+function checkGameOver(flipOccurred) {
+    if (flippedCards.length === 9) {
+        document.getElementById('status').innerText = "ジャックポットを揃えました！";
+        isGameOver = true;
+    } else if (!flipOccurred) {
+        document.getElementById('status').innerText = "カードをひっくり返せませんでした。あなたの負けです！";
+        isGameOver = true;
+    }
+}
 
 // ゲームのリセット関数
 function resetGame() {
@@ -52,6 +96,6 @@ function resetGame() {
     document.getElementById('dice-result').innerText = "";
     document.querySelectorAll('.card').forEach((card, index) => {
         card.classList.remove('flipped');
-        card.innerText = index + 1;
+        card.innerText = index + 1; // 初期状態では数字を表示
     });
 }
