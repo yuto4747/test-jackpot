@@ -13,12 +13,17 @@ let cards = [
 let flippedCards = [];
 let isGameOver = false;
 let gameStarted = false;
+let turnCount = 0; // ターン数を管理
 
 // サイコロを振る関数
 function rollDice() {
     if (isGameOver) return;
 
-    // 前回の「ちょんぼ発生！」およびサイコロの目の表示を消す
+    // ターン数を増やす
+    turnCount++;
+    document.getElementById('turn-count').innerText = `ターン数: ${turnCount}`;
+
+    // 前回のメッセージをリセット
     document.getElementById('status').innerText = "";
     document.getElementById('dice-result').innerText = "";
 
@@ -48,7 +53,7 @@ function revertOrFlipCard(dice) {
     if (flippedCards.includes(dice)) {
         card.classList.remove('flipped');
         card.innerText = dice;
-        flippedCards = flippedCards.filter(id => id !== dice); // リストから削除
+        flippedCards = flippedCards.filter(id => id !== dice);
     } else {
         const cardData = cards.find(c => c.id === dice);
         card.innerText = cardData.value;
@@ -81,9 +86,11 @@ function checkGameOver(flipOccurred) {
     if (flippedCards.length === 9) {
         document.getElementById('status').innerText = "ジャックポットを揃えました！";
         isGameOver = true;
+        document.getElementById('roll-button').classList.add('hidden'); // サイコロボタンを非表示
     } else if (!flipOccurred) {
         document.getElementById('status').innerText = "カードをひっくり返せませんでした。あなたの負けです！";
         isGameOver = true;
+        document.getElementById('roll-button').classList.add('hidden'); // サイコロボタンを非表示
     }
 }
 
@@ -92,10 +99,17 @@ function resetGame() {
     flippedCards = [];
     isGameOver = false;
     gameStarted = false;
+    turnCount = 0; // ターン数をリセット
+
+    // UIのリセット
+    document.getElementById('turn-count').innerText = `ターン数: ${turnCount}`;
     document.getElementById('status').innerText = "ゲームが始まりました！";
     document.getElementById('dice-result').innerText = "";
     document.querySelectorAll('.card').forEach((card, index) => {
         card.classList.remove('flipped');
-        card.innerText = index + 1; // 初期状態では数字を表示
+        card.innerText = index + 1;
     });
+
+    // ボタンの表示リセット
+    document.getElementById('roll-button').classList.remove('hidden');
 }
