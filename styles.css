@@ -3,6 +3,9 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 中央揃え */
 }
 
 #settings {
@@ -57,44 +60,10 @@ button {
     margin-top: 20px;
 }
 
-#reset-button {
-    margin-top: 40px;
+#reset-container {
+    margin-top: 30px; /* ゲームスタートの下に余白を追加 */
 }
 
-/* 横画面対応 */
-@media (max-width: 900px) and (orientation: landscape) {
-    #game-board {
-        flex-wrap: nowrap; /* 横画面ではカードを横一列に配置 */
-    }
-
-    .card {
-        width: 80px;
-        height: 80px;
-        font-size: 18px;
-    }
-
-    button {
-        font-size: 14px;
-    }
-
-    #status {
-        font-size: 16px;
-    }
-}
-
-/* 縦画面用の調整 */
-@media (max-width: 600px) and (orientation: portrait) {
-    .card {
-        width: 70px;
-        height: 70px;
-        font-size: 18px;
-    }
-
-    button {
-        font-size: 14px;
-    }
-
-    #status {
-        font-size: 16px;
-    }
+.hidden {
+    display: none; /* 非表示用クラス */
 }
